@@ -1,0 +1,35 @@
+---
+nagios_host: server.example.com
+nagios_port: 6557
+num_cols: 3
+debug_verbosity: 0
+product: server
+non_functionality_checks:
+  - Zombie Procs
+  - SSH
+  - Ping
+  - NTP
+  - Mem Usage
+  - Load
+  - Disk
+  - DNS
+  - Authoritative DNS Check
+  - Recursive DNS Check
+exclude_checks:
+  - Check Puppet
+exclude_hostgroups:
+  - linux
+  - All Hosts
+  - monitor
+  - carbon
+  - carbon-relay
+categories:
+  desktop:
+    - updates
+    - drupal
+    - www
+  chirkut:
+    - srith
+    - drama
+    - laven
+uncategorised: MISC

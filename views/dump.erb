@@ -1,0 +1,32 @@
+<html>
+	<head>
+	</head>
+
+	<body>
+		<table border="10px">
+			<th>
+			<% for j in 0..@tupleIndex.length-1%>
+				<% if @tupleIndex[j.to_s.to_sym]!=nil %>
+					<%= "<td>" + @tupleIndex[j.to_s.to_sym] + "</td>" %>
+				<%else%>
+					<td>nil</td>
+				<% end %>
+			<% end %>
+			</th>
+			
+			<%  for tuple in 0..@datacount %> 
+			<tr>
+				<% for col in 0..@tupleIndex.length %>
+					<% #k = @hostgroups[@tupleIndex[col.to_s.to_sym].to_sym][tuple] %>
+					<% l = @tupleIndex[col.to_s.to_sym]; if l!=nil; k = @hostgroups[l.to_sym]; else k=[]; end  %>
+					<% if k[tuple]!= nil %>
+						<%= "<td>" +  k[tuple] + "</td>" %>
+					<% else %>
+						<td>nil</td>
+					<% end %>
+				<% end %>
+			</tr>
+			<% end %>
+		</table>
+	</body>
+</html>

@@ -1,0 +1,22 @@
+<html>
+	<head>
+	</head>
+
+	<body>
+	<center>
+		<div id="header"></div>
+		<div id="content">
+			<% for hosts in 1..@datacount %>
+				<% @nodename = @hostgroups[@tupleIndex[@check_list.to_s.to_sym].to_sym][hosts] %>
+				<% @clustername = @hostgroups[@tupleIndex[39.to_s.to_sym].to_sym][hosts] %>
+				<div class="hg" style="clear: both">
+					<div id="hgname"><%= @clustername %></div>
+					<div id="hosts" style="float: left">
+						<%= @nodename %>	
+					</div>
+				</div>
+			<% end %>
+		</div>
+	</center>
+	</body>
+</html>

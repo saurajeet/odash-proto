@@ -1,0 +1,84 @@
+<html>
+<head>
+<script type="text/javascript">
+	var showing='none';
+	document.onkeyup = KeyCheck;
+        
+	function KeyCheck(e)
+        {       
+                var KeyID = (window.event) ? event.keyCode : e.keyCode;
+                switch(KeyID)
+                {
+                        case 27:
+			document.getElementById(showing).style.visibility='hidden';
+                        showing='none';
+                        break;
+                }
+        }
+
+	function showToast(hostHealth)
+	{	if (showing != 'none')
+	        {	document.getElementById(showing).style.visibility='hidden';
+			showing='none';
+		}
+		document.getElementById(hostHealth).style.visibility='visible';
+		showing = hostHealth;
+	}
+		var enabled_gip = "";
+                function showoptions(el, hi)
+                {       if (enabled_gip == el)
+                                return;
+                        var option1 = "<a class='toast_link' onclick=showToast('"+ hi  +"')></a>"; 
+                        var option2 = "<a href='#somlink'> </a>";
+                        //alert (option1.valueOf() + " | " + option2.valueOf()) ;
+                        console.log ("Enabled_Gip =", enabled_gip);
+			console.log ("Element =", el);
+                        if (enabled_gip != "") {
+                                document.getElementById(enabled_gip).innerHTML = "";
+                                enabled_gip = "";
+                        } 
+                        enabled_gip = el;
+                        document.getElementById(el).innerHTML= option1.valueOf() + option2.valueOf() ;
+                }
+	function sloads()
+	{	
+		var xmlhttp;
+		var x;
+		if (window.XMLHttpRequest)
+		  {// code for IE7+, Firefox, Chrome, Opera, Safari
+			  xmlhttp=new XMLHttpRequest();
+		  }
+		else
+		  {// code for IE6, IE5
+			  xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
+		  }
+		xmlhttp.onreadystatechange=function()
+		{
+			if (xmlhttp.readyState==4 &&  xmlhttp.status==200)
+			{
+				x=xmlhttp.responseText
+			    	document.getElementById('abc').innerHTML=x;
+		    	}
+	  	}
+		xmlhttp.open("GET","/dash",true);
+		xmlhttp.send();	
+	}
+	function myfunc()
+        {
+                        setTimeout(sloads, 300000);
+                        setTimeout(myfunc, 300000);
+        }
+	sloads();
+        window.onload = myfunc; 
+</script>
+</head>
+<body>
+	<div id="abc">
+		<table align="center">
+			<tr>
+				<td>L<img alt="o" src="img/click.gif" height="40%" />oading</td>
+			</tr>
+		</table>
+	</div>
+</body>
+</html>

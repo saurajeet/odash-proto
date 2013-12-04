@@ -1,0 +1,284 @@
+<html>
+	<head>
+	<link href="css/bootstrap.css" rel="stylesheet" />
+	<link rel="shortcut icon" href="favicon.jpg" />
+	<META NAME="AUTHOR" CONTENT="Saurajeet Dutta">
+	<style type="text/css">
+		.host
+		{	height: 20px;
+			float: left;
+			width: 20%;
+			display: block;
+			margin: 0px;
+			border: none;
+			padding: 0px;
+			margin-right: 5px;
+			margin-top: 5px;
+			margin-bottom: 5px;
+			border-radius: 20px;	
+			cursor: pointer;
+		}
+		#hostlist
+		{	float : left;
+			margin: 0px;
+			border: none;
+			padding: 0px;
+			margin-left: 10px;
+			min-width: 50%;
+		}
+		#clustername
+		{	float : left;
+			min-height: 30px;
+			width: 45%;
+			text-align: right;
+			/*border-bottom: 2px #BBB solid;*/
+			font-size: medium;
+		}
+		td
+		{	width: 32%;
+		}
+		#content
+		{	padding-top: 1%;
+			clear : both;
+			width: 100%;
+			height: 100%;
+		}
+		#wrapper
+		{	clear: both;
+		}
+		@font-face 
+		{	font-family: bodytalkto;
+			src: url('fonts/Ubuntu-L.ttf');
+		}
+		body
+		{	min-height: 768px;
+			display: block;
+			background-color: #DDD;
+			margin: 0;
+			border: none;
+			font-family: "bodytalkto";
+		}
+		@font-face
+		{	font-family: talktofont;
+			src: url('fonts/MankSans.ttf');
+		}
+		#header
+		{	text-align : left;
+			font-family: "talktofont";
+			font-weight: bold;
+			font-size: 24px;
+			color: white;
+			background-color: #000;
+			border: none;
+			margin: none;
+			width: 100%;
+		}
+		center
+		{	border: none;
+			margin: none;
+		}
+		.hosth
+		{	 visibility: hidden;
+			 position: absolute;
+			 background-color: white;
+			 //opacity: 0.95;
+			 color: black;
+			 border: 2px solid black;
+			 z-index: 999;
+			 width: 80%;
+			 top: 10%;
+			 left: 10%;
+		}
+		#footer
+		{	font-size: x-small;
+			text-align: center;
+			clear: both;
+			position: absolute;
+			top: 98%;
+			left: 10%;
+			width: 80%;
+		}
+		#categoryheader
+		{	text-align: left;
+			padding-left: 1%;
+			border-top-right-radius: 10px;
+			border-bottom-right-radius: 10px;
+			background-color: white;
+			border: 2px #EEE solid;
+			color: #333;
+			margin-top: 20px;
+			width: 10%;
+			margin-right: 89%;
+		}
+		.cnt
+		{	font-size: small;
+		}
+		#chklist
+		{	font-size: smaller;
+		}
+		#chk
+		{	width: 30%;
+		}
+		.metrics_link
+		{	display: block;
+			text-size: x-small;
+			border: 0px;
+			padding: 0px;
+			width:49%;
+			height:98%;
+			background-color: white;
+			opacity: 0.2;
+			float:left;
+			border-top-right-radius: 20px;
+			border-bottom-right-radius: 20px;
+		}
+		.toast_link
+		{	display: block;
+			text-size: x-small;
+			border: 0px;
+			padding: 0px;
+			float:left;	
+			width:49%;
+			height:98%;
+			background-color: black;
+			opacity: 0.4;
+			border-top-left-radius: 20px;
+			border-bottom-left-radius: 20px;
+		}
+	</style>
+	<script type="text/javascript">
+		//Defining Javascript function to select DOM elements by styles applied
+		onload=function(){
+			if (document.getElementsByClassName == undefined) {
+				document.getElementsByClassName = function(className)
+				{
+					var hasClassName = new RegExp("(?:^|\\s)" + className + "(?:$|\\s)");
+					var allElements = document.getElementsByTagName("*");
+					var results = [];
+	
+					var element;
+					for (var i = 0; (element = allElements[i]) != null; i++) {
+						var elementClass = element.className;
+						if (elementClass && elementClass.indexOf(className) != -1 && hasClassName.test(elementClass))
+							results.push(element);
+					}
+					
+					return results;
+				}
+			}
+		}
+	</script>
+	</head>
+
+	<body>
+		<div id="header">
+			<img src="favicon.jpg" width="40px" />
+			<span style="padding-top: 20px;">Diwali Dashboard for <%= @ttConfig.configuration["product"]%></span>
+			<% t = Time.new %>
+			<span style="position:absolute; top: 2%; left: 75%; font-size: smaller">
+				<%= "As of: " + t.hour.to_s + ":" + t.min.to_s + " " + t.zone %>
+				<% t1 = t + 5*60*60 + 30*60 %>
+				<%= "As of: " + t1.hour.to_s + ":" + t1.min.to_s + " IST" %>
+			</span>
+		</div>
+	<center>
+	<% serverapps = @ttConfig.configuration["categories"]["serverapps"] %>
+	<% pappu = @ttConfig.configuration["categories"]["pappu"] %>
+ 	<% mobile = @ttConfig.configuration["categories"]["mobile"] %>
+	<% desktop = @ttConfig.configuration["categories"]["desktop"] %>
+	<% chirkut = @ttConfig.configuration["categories"]["chirkut"] %>
+	<% rows = @ttConfig.configuration["num_cols"] %>
+	<div id="content">
+	<% @ttConfig.configuration["categories"].each do |catname, cathgs|%>
+		<div id="categoryheader"><%= catname %></div>
+		<table border="0px" width="95%">
+			<% tableElements = 0; notlist = @ttConfig.configuration["exclude_hostgroups"] %>
+			<% @pageData.each do |cluster, hostlist| %>
+				<% if cathgs.include? cluster %>
+				<% if !(notlist.include? cluster);tableElements = tableElements + 1;else;next;end %>
+				<% if tableElements % rows == 1 %>
+					<tr>
+				<% end %>
+				<td>
+				<% if !(notlist.include? cluster) %>
+				<div id="wrapper" class="row">
+					<div id="clustername" style="color: <%= @clusterHealth[cluster][:status] %>"> 
+						<a href="#?hostgroup=<%= cluster %>&style=detail" ><%= cluster %></a> 
+						<span class="cnt" title="(NodeCount, HealthyNodes, SickNodes)">
+							(<%= @clusterHealth[cluster][:nodecount] %>, <%= @clusterHealth[cluster][:healthynodes] %>, <%= @clusterHealth[cluster][:sicknodes] %>)
+						</span>
+					</div>
+					<div id="hostlist">
+						<% hostlist.each do |host| %>
+							<div id="<%= host[:hostname] %>" style="width:10%; background-color: <%= host[:status] %>" title="<%= host[:hostname] %>" class="host" onmouseover="showoptions('<%= host[:hostname] %>', 'hosthealth<%= host[:index] %>')">
+							</div>
+								<div id="hosthealth<%= host[:index] %>" class="hosth">
+									<table id="chklist">
+									<% @health[(host[:index].to_i)].each do |check, status| %>
+										<tr <%= (status =~ /FAIL/)?("style='font-weight: bold;font-size:larger;color:red;border: solid red 1px'"):("")%>>
+											<td id="chk"><%= check %></td>
+											<td><%= status %></td>
+										</tr>
+									<% end %>
+									</table>
+								</div>
+							<!--/div-->
+						<% end %>
+					</div>
+				</div>
+				<% end %>
+				</td >
+				<% if tableElements % rows == 0 %>	
+					</tr>
+				<% end %>
+				<% @pageData.delete(cluster)  %>
+				<% end %>
+			<% end %>
+		</table>
+	<% end %>
+		<div id="categoryheader"><%= @ttConfig.configuration["uncategorised"] %></div>
+		<table border="0px" width="95%">
+			<% tableElements = 0; notlist = @ttConfig.configuration["exclude_hostgroups"] %>
+			<% @pageData.each do |cluster, hostlist| %>
+				<% if !(notlist.include? cluster);tableElements = tableElements + 1;else;next;end %>
+				<% if tableElements % rows == 1 %>
+					<tr>
+				<% end %>
+				<td>
+				<% if !(notlist.include? cluster) %>
+				<div id="wrapper" class="row">
+					<div id="clustername" style="color: <%= @clusterHealth[cluster][:status] %>"> 
+						<a href="#hostgroup=<%= cluster %>&style=detail" ><%= cluster %></a> 
+						<span class="cnt" title="(NodeCount, HealthyNodes, SickNodes)">
+							(<%= @clusterHealth[cluster][:nodecount] %>, <%= @clusterHealth[cluster][:healthynodes] %>, <%= @clusterHealth[cluster][:sicknodes] %>)
+						</span>
+					</div>
+					<div id="hostlist">
+						<% hostlist.each do |host| %>
+							<div id="<%= host[:hostname] %>" style="width:10%; background-color: <%= host[:status] %>" title="<%= host[:hostname] %>" 
+								class="host" onmouseover="showoptions('<%= host[:hostname] %>', 'hosthealth<%= host[:index] %>')">
+							</div>
+								<div id="hosthealth<%= host[:index] %>" class="hosth">
+									<table id="chklist">
+									<% @health[(host[:index].to_i)].each do |check, status| %>
+										<tr <%= (status =~ /FAIL/)?("style='font-weight: bold;font-size:larger;color:red;border: solid red 1px'"):("")%>>
+											<td id="chk"><%= check %></td>
+											<td><%= status %></td>
+										</tr>
+									<% end %>
+									</table>
+								</div>
+							<!--/div-->
+						<% end %>
+					</div>
+				</div>
+				<% end %>
+				</td >
+				<% if tableElements % rows == 0 %>	
+					</tr>
+				<% end %>
+			<% end %>
+		</table>
+	</center>
+	</body>
+</html>
